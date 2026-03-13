@@ -1,10 +1,11 @@
 /* ==========================================================================
    Tệp: ketnoi.js - Trạm kết nối Github Pages <-> Google Apps Script
+   Thiết kế và phát triển: Hoàng Ngọc Lâm
    ========================================================================== */
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbys_v4n0ZrCV0ZnW98QHmHGtynI8V4cbeEHCz51y3XnYr3QBOfPoXBM7YPI8nhNrxEyIw/exec"; 
 
-// Biến toàn cục lấy email từ LocalStorage (do màn hình đăng nhập ghi vào)
+// Biến toàn cục lấy email từ sessionStorage (do màn hình đăng nhập ghi vào)
 let USER_EMAIL = sessionStorage.getItem("SKT_USER_EMAIL") || "";
 
 const google = {
@@ -20,8 +21,9 @@ function createRunObject(successCb = null, failureCb = null) {
             if (prop === 'withFailureHandler') return function(cb) { return createRunObject(successCb, cb); };
             
             return function(...args) {
-                // Cập nhật lại email ngay trước khi gửi đề phòng người dùng mới đăng nhập
-                USER_EMAIL = localStorage.getItem("SKT_USER_EMAIL") || "";
+                // SỬA Ở ĐÂY: Cập nhật lại email ngay trước khi gửi đề phòng người dùng mới đăng nhập
+                // Đồng bộ dùng sessionStorage và biến cục bộ từ index.html
+                USER_EMAIL = window.SKT_GLOBAL_EMAIL || sessionStorage.getItem("SKT_USER_EMAIL") || "";
                 executeBackend(prop, args, successCb, failureCb);
             };
         }
@@ -54,4 +56,3 @@ function executeBackend(action, argsArray, onSuccess, onFailure) {
     });
 
 }
-
