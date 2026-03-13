@@ -14,6 +14,7 @@ const google = {
     }
 };
 
+// Thay thế đoạn function createRunObject trong SKT_KetNoi.js
 function createRunObject(successCb = null, failureCb = null) {
     return new Proxy({}, {
         get: function(target, prop) {
@@ -21,8 +22,7 @@ function createRunObject(successCb = null, failureCb = null) {
             if (prop === 'withFailureHandler') return function(cb) { return createRunObject(successCb, cb); };
             
             return function(...args) {
-                // SỬA Ở ĐÂY: Cập nhật lại email ngay trước khi gửi đề phòng người dùng mới đăng nhập
-                // Đồng bộ dùng sessionStorage và biến cục bộ từ index.html
+                // SỬA Ở ĐÂY: Dùng window.SKT_GLOBAL_EMAIL hoặc sessionStorage
                 USER_EMAIL = window.SKT_GLOBAL_EMAIL || sessionStorage.getItem("SKT_USER_EMAIL") || "";
                 executeBackend(prop, args, successCb, failureCb);
             };
@@ -56,3 +56,4 @@ function executeBackend(action, argsArray, onSuccess, onFailure) {
     });
 
 }
+
